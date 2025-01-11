@@ -1,0 +1,79 @@
+[gd_scene load_steps=4 format=3 uid="uid://bnmehj0s1vti"]
+
+[ext_resource type="Script" path="res://node_3d.gd" id="1_gxtm4"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_i41jh"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k4jom"]
+albedo_color = Color(0.411765, 0.466667, 1, 1)
+metallic = 0.41
+metallic_specular = 1.0
+roughness = 0.51
+emission_operator = 1
+backlight_enabled = true
+backlight = Color(0.79, 0.79, 0.79, 1)
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_gxtm4")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 10.7717, 4.29589)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.717008, 0.697065, 0, -0.697065, -0.717008, 0, 5.31112, -3.57725)
+
+[node name="GridContainer" type="GridContainer" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -57.0
+offset_right = 57.0
+offset_bottom = 40.0
+grow_horizontal = 2
+columns = 2
+
+[node name="Add" type="Button" parent="GridContainer"]
+layout_mode = 2
+text = "Add"
+
+[node name="Remove" type="Button" parent="GridContainer"]
+layout_mode = 2
+text = "Remove	"
+
+[node name="GridContainer2" type="GridContainer" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -51.0
+offset_top = 48.0
+offset_right = 63.0
+offset_bottom = 88.0
+grow_horizontal = 2
+columns = 2
+
+[node name="Undo" type="Button" parent="GridContainer2"]
+layout_mode = 2
+text = "Undo"
+
+[node name="Redo" type="Button" parent="GridContainer2"]
+layout_mode = 2
+text = "Redo"
+
+[node name="Cube" type="MeshInstance3D" parent="."]
+unique_name_in_owner = true
+visible = false
+mesh = SubResource("BoxMesh_i41jh")
+surface_material_override/0 = SubResource("StandardMaterial3D_k4jom")
+
+[node name="Cubes" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="SpotLight3D" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.75673, 8.47344)
+spot_range = 15.0
+spot_angle = 50.24
+
+[connection signal="pressed" from="GridContainer/Add" to="." method="_on_add_pressed"]
+[connection signal="pressed" from="GridContainer/Remove" to="." method="_on_remove_pressed"]
+[connection signal="pressed" from="GridContainer2/Undo" to="." method="_on_undo_pressed"]
+[connection signal="pressed" from="GridContainer2/Redo" to="." method="_on_redo_pressed"]
