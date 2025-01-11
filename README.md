@@ -1,5 +1,7 @@
 `register_action` - register an action using a Callable and its arguments
+
 `undo` undo last operation
+
 `redo` redo last operation
 
 Example:
