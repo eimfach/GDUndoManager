@@ -1,9 +1,8 @@
 class_name GDUndoManager
 
-var operations: Array = []
-var redo_operations: Array = []
+var _operations: Array = []
+var _redo_operations: Array = []
 var _lock: int = NONE
-var _last_undo_name: String = ""
 
 enum {
 	NONE,
@@ -20,46 +19,38 @@ func register_action(fn: Callable, args: Array):
 	
 	match _lock:
 		NONE:
-			operations.append(op)
-			redo_operations.resize(0)
+			_operations.append(op)
+			_redo_operations.resize(0)
 		REDO:
-			operations.append(op)
+			_operations.append(op)
 		UNDO:
-			redo_operations.append(op)
+			_redo_operations.append(op)
 
 func undo():
 	_lock = UNDO
-	var op = operations.pop_back()
-
+	var op = _operations.pop_back()
+	
 	if !op:
 		return
 		
 	op.fn.callv(op.args)
-	
-	if op.action_name == "Unknown Action":
-		op.action_name = _last_undo_name
-	else:
-		_last_undo_name = op.action_name
 		
 	emit_signal("operation", "Undo " + op.action_name)
 	_lock = NONE
 	
 func redo():
 	_lock = REDO
-	var op = redo_operations.pop_back()
+	var op = _redo_operations.pop_back()
 	if !op:
 		return
-	
-	if op.action_name == "Unknown Action":
-		op.action_name = _last_undo_name
-	
+		
 	op.fn.callv(op.args)
 	
 	emit_signal("operation", "Redo " + op.action_name)
 	_lock = NONE
 	
 class GDUndoOperation:
-	var action_name: String = "Unknown Action"
+	var action_name: String = "Action"
 	var fn: Callable
 	var args: Array = []
 	
